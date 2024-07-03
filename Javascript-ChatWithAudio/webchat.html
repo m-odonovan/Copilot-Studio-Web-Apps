@@ -1,0 +1,167 @@
+<!-- sample from https://github.com/microsoft/BotFramework-WebChat/tree/main/samples/03.speech/b.cognitive-speech-services-js-->
+<!-- and style sample frm https://learn.microsoft.com/en-us/power-virtual-agents/customize-default-canvas -->
+<!-- note: this only seems to work properly for bots publish via tradtional PVA, not new modern canvas, new modern canvas causes issues becuase it doesnt add voice SSML tag into the message body sent to Azure Speach Service, you will see this is dev tools -->
+<!-- //Style options - https://github.com/microsoft/BotFramework-WebChat/blob/main/packages/api/src/defaultStyleOptions.ts -->
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <title>Web Chat: Cognitive Services Speech Services using JavaScript</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script crossorigin="anonymous" src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+      }
+
+       h1 {
+            font-size: 16px;
+            font-family: Segoe UI;
+            line-height: 20px;
+            color: whitesmoke;
+            display: table-cell;
+            padding: 13px 0px 0px 20px;
+        }
+
+        #heading {
+            background-color: black;
+            height: 50px;
+        }
+
+        .main {
+            margin: 18px;
+            border-radius: 4px;
+        }
+
+        div[role="form"]{
+            background-color: black;
+        }
+
+        #webchat {
+            position: fixed;
+            height: calc(100% - 50px);
+            width: 100%;
+            top: 50px;
+            overflow: hidden;
+        }
+    </style>
+  </head>
+  <body>
+	  <div id="heading">
+         <!-- Change the h1 text to change the bot name -->
+         <h1>Contoso Bot Name</h1>
+    </div>
+    <div id="webchat" role="main"></div>
+    <script>
+
+      //replace with URL to Direct Line for Copilot Studio
+    let varPVAUrl = "https://x/directline/token?api-version=2022-03-01-preview";
+        
+    const store = WebChat.createStore({}, ({ dispatch }) => next => action => {
+     if (action.type === 'DIRECT_LINE/CONNECT_FULFILLED') {
+       dispatch({
+          type: "WEB_CHAT/SEND_EVENT",
+          payload: {
+            name: "pvaSetContext",
+            value: {
+               "productid": "foobarv2",
+               "var2":"22"
+            }
+          },
+        });
+      }
+        return next(action);
+    });
+    
+		const styleOptions = {
+
+
+
+
+
+           // Add styleOptions to customize Web Chat canvas
+		   backgroundColor: 'lightgray',
+		    botAvatarInitials: 'SA',
+            accent: '#00809d',
+            botAvatarBackgroundColor: "#FFFFFF",
+            botAvatarImage: 'https://learn.microsoft.com/azure/bot-service/v4sdk/media/logo_bot.svg',
+            userAvatarBackgroundColor: "#FFFFFF",
+  			userAvatarImage: 'https://avatars.githubusercontent.com/u/661465',
+			userAvatarInitials: 'UU',
+           	hideUploadButton: true,
+             bubbleBorderRadius: 20,
+             bubbleFromUserBorderRadius: 20,
+             bubbleBorderStyle: 'solid',
+             bubbleFromUserNubOffset: 'top',
+             bubbleFromUserNubSize: 10,
+             bubbleNubOffset: 'top',
+              bubbleNubSize: 10,
+             
+        };
+
+		
+      function createFetchSpeechServicesCredentials() {
+        let expireAfter = 0;
+        let lastPromise;
+        //let region = "eastus";
+		    //let subkey = ""; //<add your subkey here, but better to leave empty and rather use auth keys>
+        let key = ""
+        return () => {
+          const now = Date.now();
+
+          if (now > expireAfter) {
+           expireAfter = now + 300000;
+            //replace with URL to function which returns auth token, better than hard coding into this HTML file
+            lastPromise = fetch('https://x.azurewebsites.net/api/GetToken', {
+              method: 'POST'
+            }).then(
+            res => res.json(),
+              err => {
+                expireAfter = 0;
+
+                return Promise.reject(err);
+              }
+            );
+          }
+
+          return lastPromise;
+          //return { region: "eastus", authorizationToken: key };
+//		  return { region: "eastus", subscriptionKey: subkey };
+       
+       };
+      }
+      //en-ZA-LeahNeural, en-US-AvaMultilingualNeural (non Open AI), en-US-AlloyMultilingualNeural (openai)
+
+      const fetchSpeechServicesCredentials = createFetchSpeechServicesCredentials();
+
+      (async function() {
+
+        const res = await fetch(varPVAUrl, { method: 'GET' });
+        const { token } = await res.json();
+      const webSpeechPonyfillFactory = await window.WebChat.createCognitiveServicesSpeechServicesPonyfillFactory({
+        credentials: fetchSpeechServicesCredentials
+        });
+
+varDirectLine = window.WebChat.createDirectLine({ token });
+varDirectLine.domain = "https://europe.directline.botframework.com/v3/directline";
+
+        window.WebChat.renderWebChat(
+          {
+            directLine: varDirectLine,
+			language: 'en-ZA',
+      selectVoice:() => ({ voiceURI: 'en-US-AlloyMultilingualNeural' }),	
+            webSpeechPonyfillFactory,	store,	
+			styleOptions
+          },
+          document.getElementById('webchat')
+        );
+
+        document.querySelector('#webchat > *').focus();
+      })().catch(err => console.error(err));
+    </script>
+  </body>
+</html>
