@@ -4,7 +4,7 @@ This is a react web application which has a microphone (voice) as the only input
 
 1. It doesn't use direct line speech, it uses Azure Cognitive Speech
 2. It allows for the Copilot Studio bot to live in Europe i.e. in app.js, you will see that the domain property is used to support bots in other regions
-3. It assumes another service exists to return the auth token for Azure Cognitive Speach service, with keys of region and authorizationToken
+3. It assumes another service exists to return the auth token for Azure Cognitive Speach service, as a JSON object, with keys of region and authorizationToken
 4. A few other JS files have been removed which were not needed
 
 To use, edit app.js to point to your Copilot Studio bot, and edit fetchSpeechToken.js to point to your host which returns the auth token for Speech Services. Use Node and run NPM install to install node modules needed, and run NPM start to buiuld and start the web application.
