@@ -5,3 +5,5 @@ All the web samples provided which use Azure Speech service for voice <-> text, 
 This sample is an HTTP Trigger portal designer edited C# function. It's pretty basic and probably needs some work to make more robust, but works for my demonstrations.
 
 Note - it has the Speech Services key hard coded in the source. It's recommend you change this to use managed identity instead for production scenario.
+
+You will need to add the host URL of you web chat app as a host in CORS configuration, otherwise the function will not allow the calling application to call it.
