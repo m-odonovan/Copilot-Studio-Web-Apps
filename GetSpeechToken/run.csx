@@ -38,5 +38,7 @@ public static async Task<IActionResult> Run(HttpRequest req, ILogger log)
         catch (Exception ex)
         {
             log.LogError(ex, "Error occurred while getting speech token");
+            return new OkObjectResult(ex.Message);
+
         }
 }
