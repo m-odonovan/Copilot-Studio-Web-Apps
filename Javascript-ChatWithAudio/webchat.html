@@ -62,7 +62,9 @@ also, varDirectLine.domain is hard coded to point to Europe service, you might n
 
       //replace with URL to Direct Line for Copilot Studio
     let varPVAUrl = "https://x/directline/token?api-version=2022-03-01-preview";
-        
+
+	//if you want the copilot to start with teh conversaton start topic, you need to send a message to say the conversation has started
+    // a good example is done in the webchat html sample, this below sends variables into the chat
     const store = WebChat.createStore({}, ({ dispatch }) => next => action => {
      if (action.type === 'DIRECT_LINE/CONNECT_FULFILLED') {
        dispatch({
@@ -86,15 +88,15 @@ also, varDirectLine.domain is hard coded to point to Europe service, you might n
 
 
            // Add styleOptions to customize Web Chat canvas
-		   backgroundColor: 'lightgray',
-		    botAvatarInitials: 'SA',
+	   backgroundColor: 'lightgray',
+	    botAvatarInitials: 'SA',
             accent: '#00809d',
             botAvatarBackgroundColor: "#FFFFFF",
             botAvatarImage: 'https://learn.microsoft.com/azure/bot-service/v4sdk/media/logo_bot.svg',
             userAvatarBackgroundColor: "#FFFFFF",
-  			userAvatarImage: 'https://avatars.githubusercontent.com/u/661465',
-			userAvatarInitials: 'UU',
-           	hideUploadButton: true,
+		userAvatarImage: 'https://avatars.githubusercontent.com/u/661465',
+		userAvatarInitials: 'UU',
+		hideUploadButton: true,
              bubbleBorderRadius: 20,
              bubbleFromUserBorderRadius: 20,
              bubbleBorderStyle: 'solid',
@@ -149,6 +151,7 @@ also, varDirectLine.domain is hard coded to point to Europe service, you might n
         });
 
 varDirectLine = window.WebChat.createDirectLine({ token });
+//note there is a better way to get this dynamicly, check out the sample which is just webchat without audio, it has logic to get this dynamically
 varDirectLine.domain = "https://europe.directline.botframework.com/v3/directline";
 
         window.WebChat.renderWebChat(
