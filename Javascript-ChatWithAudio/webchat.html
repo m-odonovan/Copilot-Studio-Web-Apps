@@ -152,13 +152,14 @@ also, varDirectLine.domain is hard coded to point to Europe service, you might n
 
 varDirectLine = window.WebChat.createDirectLine({ token });
 //note there is a better way to get this dynamicly, check out the sample which is just webchat without audio, it has logic to get this dynamically
+	      // also, make sure the voice you choose is in your speech region, and matches the language provided below
 varDirectLine.domain = "https://europe.directline.botframework.com/v3/directline";
 
         window.WebChat.renderWebChat(
           {
             directLine: varDirectLine,
 			language: 'en-ZA',
-      selectVoice:() => ({ voiceURI: 'en-US-AlloyMultilingualNeural' }),	
+      selectVoice:() => ({ voiceURI: 'en-US-AvaMultilingualNeural' }),	
             webSpeechPonyfillFactory,	store,	
 			styleOptions
           },
