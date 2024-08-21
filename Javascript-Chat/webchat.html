@@ -1,7 +1,7 @@
 <!-- insipration for this sample from https://github.com/microsoft/BotFramework-WebChat/tree/main/samples/-->
 <!-- docs for Style options - https://github.com/microsoft/BotFramework-WebChat/blob/main/packages/api/src/defaultStyleOptions.ts -->
 
-<!-- edit theURL to change to your Copilto Studio URL -->
+<!-- edit 'theURL' variable to change to your Copilot Studio URL -->
 
 <!DOCTYPE html><html>
 <head>
@@ -235,7 +235,7 @@
         };
 
         // Add your copilot token endpoint below
-        var theURL = "https://4ebb0c484e70ed48ae922c4bc00831.4d.environment.api.powerplatform.com/powervirtualagents/botsbyschema/crc39_percy/directline/token?api-version=2022-03-01-preview";
+        var theURL = "https://x/directline/token?api-version=2022-03-01-preview";
 
         var environmentEndPoint = theURL.slice(0,theURL.indexOf('/powervirtualagents'));
         var apiVersion = theURL.slice(theURL.indexOf('api-version')).split('=')[1];
