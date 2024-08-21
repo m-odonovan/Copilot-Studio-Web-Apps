@@ -2,6 +2,8 @@
 <!-- and style sample frm https://learn.microsoft.com/en-us/power-virtual-agents/customize-default-canvas -->
 <!-- note: this only seems to work properly for bots publish via tradtional PVA, not new modern canvas, new modern canvas causes issues becuase it doesnt add voice SSML tag into the message body sent to Azure Speach Service, you will see this is dev tools -->
 <!-- //Style options - https://github.com/microsoft/BotFramework-WebChat/blob/main/packages/api/src/defaultStyleOptions.ts -->
+<!-- there are several variables that need to be changed below e.g. varPVAUrl, and in function createFetchSpeechServicesCredentials you must change URI to get your speach creds,
+also, varDirectLine.domain is hard coded to point to Europe service, you might need to change this based on location of your copilot -->
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
@@ -68,8 +70,8 @@
           payload: {
             name: "pvaSetContext",
             value: {
-               "productid": "foobarv2",
-               "var2":"22"
+               "productid": "SKU1234567",
+               "incidentid":"INC1234567"
             }
           },
         });
