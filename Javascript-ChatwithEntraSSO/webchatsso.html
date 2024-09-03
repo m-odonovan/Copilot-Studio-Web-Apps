@@ -1,0 +1,375 @@
+<!-- documentation on doing SSO with Entra ID is here - https://learn.microsoft.com/en-us/microsoft-copilot-studio/configure-sso?tabs=webApp -->
+<!-- this sample is based on combing 2 samples -->
+<!-- #1 - SSO for Web Chat Control, which uses MSAL 1 https://github.com/microsoft/PowerVirtualAgentsSamples/blob/master/BuildYourOwnCanvasSamples/3.single-sign-on/index.html -->
+<!-- #2 - Using MSAL 2.0 in Javascript https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/samples/msal-browser-samples/TestingSample/app/index.html -->
+<!-- The instructions for this sample are in the Github repo, in detail. At a high-lebel though -->
+<!-- 1. You need an Entrat ID (Azure AD) app registration for your Copilot Studio copilot i.e. it must be setup as manual authentication -->
+<!-- 2. You need a second Entra ID (Azure AD) App registration for the host page (canvas) i.e. this HTML page. -->
+<!-- 3. You need to in the copilot App registration, expose an API, and add a client application, which is the ID of the canvas app registatrion. This establishes the "link" between them -->
+<!-- 4. In this sample, edit autConfig.js to point to your Client ID from canvas app and add Directory Id the authority URL -->
+<!-- 5. In this sample, edit this HTML page and replace the DirectLine URL with your copilot's URL i.e. the variabled call theURL -->
+<!-- note- in this sample, if you signin with popup, you will need to reload page to see the chat window working, redirect forces page to reload -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Chat with Entra ID SSO</title>
+    <script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
+    <script type="text/javascript" src="https://alcdn.msauth.net/browser/2.8.0/js/msal-browser.min.js"></script>
+    <!-- This styling is for the Web Chat demonstration purposes. It is recommended that style is moved to a separate file for organization in larger projects -->
+    <style>
+        html,
+        body {
+            height: 100%;
+            font-size: 16px;
+            font-family: Segoe UI;
+            color: white
+        }
+
+        body {
+            background-color: #111315;
+            margin: 0;
+            font-size: 16px;
+
+            padding: 0;
+
+        }
+
+        .actionbutton {
+
+            margin-right: 10px;
+            margin-top: 3px;
+            margin-bottom: 3px;
+            border: 1px solid;
+            border-color: rgb(82, 82, 82);
+            background-color: transparent;
+            color: white;
+            padding: 3px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        #welcomeMessage {
+
+            font-size: 13px;
+        }
+
+        #maincontainer {
+
+            display: flex;
+            height: 100%;
+        }
+
+        #nav {
+
+            display: block;
+            flex-direction: column;
+            flex-grow: 1;
+            flex-shrink: 1;
+            flex-basis: 0%
+        }
+
+        #left-column {
+            width: 260px;
+            background-color: #111315;
+            overflow: auto;
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-top: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #right-column {
+            flex: 1;
+            padding-left: 30px;
+            padding-right: 30px;
+            padding-bottom: 30px;
+            background-color: #292929;
+            overflow: auto;
+        }
+
+
+        #webchat {
+            height: 100%;
+        }
+
+        #webchatfooter {
+            height: 0px;
+        }
+
+        #mainbody {
+            background-color: #292929;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            margin: auto;
+
+            max-width: 1024px;
+            min-width: 360px;
+            transition-duration: 0.5s;
+            transition-property: width;
+            width: 1024px;
+        }
+
+        #logo {
+            display: flex;
+            justify-content: center;
+            align-items: center
+        }
+
+
+        #heading {
+            background-color: #353641;
+            height: 50px;
+        }
+
+        /* .main {
+            margin: 18px;
+            border-radius: 4px;
+        }*/
+
+        #leftnav {
+            list-style-type: none;
+            padding-inline-start: 20px;
+            padding-inline-end: 20px
+        }
+
+
+
+        #leftnav li {
+            padding: 10px;
+            margin-bottom: 15px
+        }
+
+        #leftnav li.selected {
+            background-color: #3D3D3D;
+            border-radius: 10px;
+        }
+
+        #skillsheading {
+            font-size: 13px;
+            padding-left: 20px;
+            color: #767676
+        }
+
+        #terms {
+            display: block;
+            border-top-color: #4D4D4F;
+            border-top-style: solid;
+            border-top-width: 0.7px;
+            justify-content: flex-end;
+            padding: 10px;
+
+        }
+
+        #terms p {
+
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align: right;"> <label id="welcomeMessage"></label> <button class="actionbutton" id="loginPopup"
+            onclick="signIn(this.id)">Sign in using Popup</button>
+        <button class="actionbutton" id="loginRedirect" onclick="signIn(this.id)">Sign in using Redirect</button>
+    </div>
+    <div id="maincontainer">
+        <div id="left-column">
+            <div id="logo"><img src="images/logo.png" /></div>
+            <div id="nav">
+                <p id="skillsheading">Skills</p>
+                <ul id="leftnav">
+                    <li class="selected">Copilot X</li>
+                    <li>Copilot Y</li>
+                    <li>Copilot Z</li>
+                </ul>
+            </div>
+            <div id="terms">
+                <p><img src="azurelogo.svg" width="15" height="15" border="0" />&nbsp;&nbsp;Sample disclaimer: This
+                    conversation uses AI. It may contain errors, treat information provided as talking points only.</p>
+            </div>
+        </div>
+        <div id="right-column">
+            <div id="webchat" role="main"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="scripts/authConfig.js"></script>
+    <script type="text/javascript" src="scripts/auth.js"></script>
+    <script>
+
+        (async function main() {
+
+            // Add your BOT ID below 
+            var theURL = ""; // you can find the token URL via the mobile app channel configuration
+
+            //this is all so that we can see which region copilot is in, as this will change the path to direct line passed into directline initiliasation
+            // to speed things up, you could simply hard code the region if you know it e.g. https://europe.directline.botframework.com/ or https://directline.botframework.com/
+            var environmentEndPoint = theURL.slice(0, theURL.indexOf('/powervirtualagents'));
+            var apiVersion = theURL.slice(theURL.indexOf('api-version')).split('=')[1];
+            var regionalChannelSettingsURL = `${environmentEndPoint}/powervirtualagents/regionalchannelsettings?api-version=${apiVersion}`;
+
+            const regSettings = await fetchJSON(regionalChannelSettingsURL);
+            var directLineurl = regSettings.channelUrlsById.directline;
+            //end getting the location
+
+            //if cannot get username from Entra ID account, makeup one
+            var userId = myMSALObj.getAllAccounts()[0]?.homeAccountId != null ?
+                ("contoso" + userId).substr(0, 64)
+                : (Math.random().toString() + Date.now().toString()).substr(0, 64);
+
+
+            var userName = myMSALObj.getAllAccounts()[0].name;
+            //you could add logic to not render web chat it userName doesn't have value, or myMSALObj.getAllAccounts()[0] is null
+
+            const { token } = await fetchJSON(theURL);
+
+            const directLine = window.WebChat.createDirectLine({
+                domain: `${directLineurl}v3/directline`,
+                token: token,
+            });
+
+
+            const store = WebChat.createStore({}, ({ dispatch }) => next => action => {
+                const { type } = action;
+                if (action.type === 'DIRECT_LINE/CONNECT_FULFILLED') {
+                    dispatch({
+                        type: 'WEB_CHAT/SEND_EVENT',
+                        payload: {
+                            name: 'startConversation',
+                            type: 'event',
+                            value: { text: "hello" }
+                        }
+                    });
+                    return next(action);
+                }
+                if (action.type === 'DIRECT_LINE/INCOMING_ACTIVITY') {
+                    const activity = action.payload.activity;
+                    let resourceUri;
+                    if (activity.from && activity.from.role === 'bot' &&
+                        (resourceUri = getOAuthCardResourceUri(activity))) {
+                        exchangeTokenAsync(resourceUri).then(function (token) {
+                            if (token) {
+                                directLine.postActivity({
+                                    type: 'invoke',
+                                    name: 'signin/tokenExchange',
+                                    value: {
+                                        id: activity.attachments[0].content.tokenExchangeResource.id,
+                                        connectionName: activity.attachments[0].content.connectionName,
+                                        token
+                                    },
+                                    "from": {
+                                        id: userId,
+                                        name: userName,
+                                        role: "user"
+                                    }
+                                }).subscribe(
+                                    id => {
+                                        if (id === 'retry') {
+                                            // bot was not able to handle the invoke, so display the oauthCard
+                                            return next(action);
+                                        }
+                                        // else: tokenexchange successful and we do not display the oauthCard
+                                    },
+                                    error => {
+                                        // an error occurred to display the oauthCard
+                                        return next(action);
+                                    }
+                                );
+                                return;
+                            }
+                            else
+                                return next(action);
+                        });
+                    }
+                    else
+                        return next(action);
+                }
+                else
+                    return next(action);
+            });
+
+            const styleOptions = {
+
+                // Add styleOptions to customize Web Chat canvas
+                markdownRespectCRLF: true,
+                primaryFont: '"Aptos","Segoe UI","Arial", "sans-serif"',
+                typingAnimationBackgroundImage: "url('images/typing.gif')",
+                typingAnimationHeight: 10,
+                typingAnimationWidth: 40,
+                paddingRegular: 12,
+
+                // Add styleOptions to customize Web Chat canvas
+                backgroundColor: '#292929',
+
+                suggestedActionBackgroundColor: '#292929',
+                suggestedActionBackgroundColorOnHover: '#353641',
+                suggestedActionTextColor: 'white',
+                suggestedActionBorderColor: '#525252',
+                suggestedActionBorderRadius: 2,
+                suggestedActionBorderStyle: 'solid',
+                suggestedActionBorderWidth: 1,
+
+                botAvatarInitials: '',
+                botAvatarBackgroundColor: "#3C6CBE", /*#6AC17D",*/
+                /* botAvatarImage: 'https://',*/
+                botAvatarImage: 'images/copilot.svg',
+                avatarBorderRadius: 2,
+
+                /*userAvatarImage: '',*/
+
+                hideUploadButton: true,
+
+                bubbleMaxWidth: 800,
+                bubbleBackground: '#333333',
+                bubbleTextColor: 'White',
+                bubbleBorderStyle: 'solid',
+                bubbleBorderColor: '#525252',
+                bubbleBorderRadius: 2,
+                bubbleNubOffset: 'top',
+                bubbleNubSize: 0,
+
+                userAvatarBackgroundColor: "#7F909D",
+                userAvatarInitials: 'M',
+                bubbleFromUserBackground: '#353641',
+                bubbleFromUserBorderColor: '#525252',
+                bubbleFromUserBorderRadius: 2,
+                bubbleFromUserTextColor: 'White',
+                bubbleFromUserNubSize: 0,
+
+                /* 
+                bubbleFromUserBackground: '#0063B1',
+                bubbleFromUserBorderColor: '#0063B1',
+                bubbleFromUserBorderRadius: 4,
+                bubbleFromUserTextColor: 'White',
+                bubbleFromUserNubOffset: 'top',
+                bubbleFromUserNubSize: 5,
+                 */
+
+                sendBoxBackground: '#353641',
+                sendBoxTextColor: 'White',
+                sendBoxBorderColor: '#525252',
+                sendBoxHeight: 50,
+                sendBoxButtonColor: '#6B6C7B',
+                sendBoxPlaceholderColor: '#6B6C7B',
+                sendBoxBorderTop: 1
+            };
+
+
+            //you could add logic to not render web chat it userName doesn't have value, or myMSALObj.getAllAccounts()[0] is null
+            window.WebChat.renderWebChat(
+                {
+                    directLine: directLine,
+                    store,
+                    userID: userId,
+                    styleOptions
+                },
+                document.getElementById('webchat')
+            );
+        })().catch(err => console.error("An error occurred: " + err));
+    </script>
+</body>
+</html>
