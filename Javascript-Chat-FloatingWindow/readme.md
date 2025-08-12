@@ -9,5 +9,5 @@ This is a single HTML page sample. It uses Botframework webchat javascript libra
 - This sample is a modified version of what is found here -
 - for documentation on the Web-Chat javascript library, check out https://github.com/microsoft/BotFramework-WebChat
 
-![chat screenshot](https://github.com/m-odonovan/CopilotStudioWebApps/blob/main/Javascript-Chat-Floating/images/floating.png "chat screenshot")
+![chat screenshot](https://github.com/m-odonovan/CopilotStudioWebApps/blob/main/Javascript-Chat-FloatingWindow/images/floating.png "chat screenshot")
 
