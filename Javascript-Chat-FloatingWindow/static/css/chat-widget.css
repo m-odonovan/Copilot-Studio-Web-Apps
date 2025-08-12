@@ -1,0 +1,186 @@
+.chat-widget {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  width: 450px;
+  max-width: 95vw;
+  max-height: 80vh;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.18), 0 2px 8px rgba(118, 75, 162, 0.10);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #764ba2;
+  overflow: hidden;
+  transition: box-shadow 0.3s, width 0.3s, height 0.3s;
+}
+
+.chat-widget ul {
+
+  padding-left: 10px
+}
+
+.chat-widget.minimized {
+  display: none !important;
+}
+
+.chat-widget.dragging {
+  user-select: none;
+  pointer-events: none;
+}
+
+.chat-widget.dragging .drag-handle {
+  cursor: grabbing;
+}
+
+.chat-header {
+  background: linear-gradient(90deg, #764ba2 0%, #667eea 100%);
+  color: #fff;
+  padding: 0.7rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Changed from space-between to flex-start */
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  gap: 10px;
+}
+
+.drag-handle {
+  cursor: move;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.drag-handle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 1);
+}
+
+.chat-title {
+  display: flex;
+  text-align: left;
+  gap: 8px;
+  font-size: 1.1rem;
+  margin-right: auto; /* Add margin-right: auto to push controls to the right */
+}
+
+.chat-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.chat-btn,
+.minimize-btn {
+  background: #fff;
+  color: #764ba2;
+  border: none;
+  border-radius: 5px;
+  padding: 3px 10px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
+}
+
+.chat-btn:hover,
+.minimize-btn:hover {
+  background: #764ba2;
+  color: #fff;
+}
+
+/* Update chat content to expand to fill the space */
+.chat-content {
+  flex: 1 1 auto;
+  background: #f9fafd;
+  padding: 14px 10px 10px 10px;
+  overflow-y: auto;
+}
+
+#webchat {
+  height: 620px;
+  /* Increased height since voice control is removed */
+  min-height: 200px;
+  max-height: 70vh;
+  overflow-y: auto;
+  font-family: 'Montserrat', Arial, sans-serif;
+}
+
+.chat-minimized-btn {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  width: 60px;
+  height: 60px;
+  background: #764ba2;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.20);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1001;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.chat-minimized-btn:hover {
+  background: #667eea;
+  transform: scale(1.05);
+}
+
+
+
+.tab-text {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  line-height: 1.2;
+}
+
+
+/* Hero section needs relative positioning for the absolute tab */
+.hero {
+  position: relative;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+
+
+
+
+  .tab-text {
+    font-size: 0.6rem;
+  }
+
+
+}
+
+@media (max-width: 600px) {
+  .tts-settings-panel {
+    width: 240px;
+    max-width: 85vw;
+  }
+
+
+
+  .tab-text {
+    font-size: 0.55rem;
+  }
+
+
+}

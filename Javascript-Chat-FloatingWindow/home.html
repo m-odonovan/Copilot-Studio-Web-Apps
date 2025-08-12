@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contoso Media Organisation - Experiment A</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="static/css/main.css">
+  <link rel="stylesheet" href="static/css/chat-widget.css">
+  
+  <!-- External Dependencies -->
+  <script src="https://unpkg.com/rxjs@6.5.3/bundles/rxjs.umd.min.js"></script>
+  <script crossorigin="anonymous" src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
+</head>
+
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <h1>Contoso Organisation</h1>
+        </div>
+        <nav class="nav">
+          <a href="#services">Services</a>
+          <a href="#departments">Departments</a>
+          <a href="#news">News</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h2>Welcome to Experiment A</h2>
+      <p>The agent has been given a single document with FAQ, and answers questions from this knowledge</p>
+    </div>
+    
+    
+  </section>
+
+  <main class="main-content">
+    <div class="container">
+      <section class="services-grid" id="services">
+        <div class="service-card">
+          <h3>🏠 Media Services</h3>
+          <p>A list of media services for your viewing and consumption, both free and paid. Tailor your style of media for all scenarios.</p>
+        </div>
+        <div class="service-card">
+          <h3>🚗 News</h3>
+          <p>Access parking permits, public transit information, and road maintenance updates to keep Springfield moving.</p>
+        </div>
+        <div class="service-card">
+          <h3>💼 Business Services</h3>
+          <p>Start your business, renew licenses, and access resources for entrepreneurs and established businesses alike.</p>
+        </div>
+        <div class="service-card">
+          <h3>👥 Community</h3>
+          <p>Discover community events, volunteer opportunities, and programs that bring our neighborhoods together.</p>
+        </div>
+        <div class="service-card">
+          <h3>🏥 Health & Safety</h3>
+          <p>Access health services, emergency information, and safety resources to keep our community thriving.</p>
+        </div>
+        <div class="service-card">
+          <h3>📚 Education</h3>
+          <p>Connect with school districts, library services, and educational programs for learners of all ages.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <a href="#services">Services</a>
+          <a href="#departments">Departments</a>
+          <a href="#contact">Contact Us</a>
+          <a href="#emergency">Emergency Info</a>
+        </div>
+        <div class="footer-section">
+          <h4>Government</h4>
+          <a href="#mayor">Our Office</a>
+          <a href="#council">Partners/a>
+          <a href="#meetings">Recorded Meetings</a>
+          <a href="#budget">Budget</a>
+        </div>
+        <div class="footer-section">
+          <h4>Resources</h4>
+          <a href="#jobs">Employment</a>
+          <a href="#permits">Licenses</a>
+          <a href="#utilities">Utilities</a>
+          <a href="#recreation">Recreation</a>
+        </div>
+      </div>
+      <p>&copy; Contoso Media Organisation. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Chat Widget HTML -->
+  <button id="chatMinimizedBtn" class="chat-minimized-btn" onclick="toggleChat()" aria-label="Open chat">
+    <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+      <circle cx="19" cy="19" r="19" fill="#764ba2" />
+      <ellipse cx="19" cy="18" rx="11" ry="8" fill="#fff" fill-opacity="0.85" />
+      <ellipse cx="19" cy="18" rx="8" ry="6" fill="#fff" fill-opacity="0.65" />
+      <ellipse cx="19" cy="18" rx="5" ry="3" fill="#fff" fill-opacity="0.5" />
+    </svg>
+  </button>
+
+  <div class="chat-widget minimized" id="chatWidget">
+    <div class="chat-header" id="chatHeader">
+      <div class="drag-handle" title="Drag to move">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <circle cx="2" cy="2" r="1" fill="currentColor" opacity="0.6" />
+          <circle cx="6" cy="2" r="1" fill="currentColor" opacity="0.6" />
+          <circle cx="10" cy="2" r="1" fill="currentColor" opacity="0.6" />
+          <circle cx="2" cy="6" r="1" fill="currentColor" opacity="0.6" />
+          <circle cx="6" cy="6" r="1" fill="currentColor" opacity="0.6" />
+          <circle cx="10" cy="6" r="1" fill="currentColor" opacity="0.6" />
+          <circle cx="2" cy="10" r="1" fill="currentColor" opacity="0.6" />
+          <circle cx="6" cy="10" r="1" fill="currentColor" opacity="0.6" />
+          <circle cx="10" cy="10" r="1" fill="currentColor" opacity="0.6" />
+        </svg>
+      </div>
+      <div class="chat-title">Contoso Agent</div>
+      <div class="chat-controls">
+        <button class="chat-btn" title="Restart" aria-label="Restart" onclick="event.stopPropagation(); restartChat()">
+          <span style="font-size:1.2em;">&#x21bb;</span>
+        </button>
+        <button class="minimize-btn" title="Close" aria-label="Close" onclick="event.stopPropagation(); toggleChat()">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M4 4L14 14M14 4L4 14" stroke="#764ba2" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="chat-content">
+      <div id="webchat"></div>
+    </div>
+  </div>
+
+  <!-- JavaScript Files -->
+  <script src="static/config/chat-config.js"></script>
+  <script src="static/js/drag-functionality.js"></script>
+  <script src="static/js/chat-functionality.js"></script>
+</body>
+</html>
