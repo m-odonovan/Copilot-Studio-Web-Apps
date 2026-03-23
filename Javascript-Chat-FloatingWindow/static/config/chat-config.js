@@ -1,4 +1,5 @@
 // Chat Configuration
+// Note: the URL below comes from teh DirectLine speach URL in your channels section of Copilot Studio. It will have the word "directline" in the URL.
 const CHAT_CONFIG = {
   tokenEndpoint: '<directlinefullpath>'
 };
