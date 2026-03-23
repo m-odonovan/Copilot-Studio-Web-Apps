@@ -79,25 +79,25 @@
 
 .chat-btn,
 .minimize-btn {
-  background: #fff;
-  color: #764ba2;
+  background: #fff !important;
+  color: #764ba2 !important;
   border: none;
   border-radius: 5px;
-  padding: 3px 10px;
+  padding: 5px;
   font-size: 1.2rem;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 32px;
-  min-height: 32px;
+  width: 32px;
+  height: 32px;
 }
 
 .chat-btn:hover,
 .minimize-btn:hover {
-  background: #764ba2;
-  color: #fff;
+  background: #764ba2 !important;
+  color: #fff !important;
 }
 
 /* Update chat content to expand to fill the space */
@@ -123,8 +123,8 @@
   bottom: 30px;
   width: 60px;
   height: 60px;
-  background: #764ba2;
-  color: white;
+  background: #764ba2 !important;
+  color: white !important;
   border: none;
   border-radius: 50%;
   box-shadow: 0 8px 24px rgba(102, 126, 234, 0.20);
@@ -137,7 +137,7 @@
 }
 
 .chat-minimized-btn:hover {
-  background: #667eea;
+  background: #667eea !important;
   transform: scale(1.05);
 }
 
