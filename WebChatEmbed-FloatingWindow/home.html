@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contoso Media Organisation - Experiment A</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="static/css/main.css">
+  <link rel="stylesheet" href="static/css/chat-widget.css">
+  
+  <!-- External Dependencies -->
+  
+  
+</head>
+
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <h1>Contoso Organisation</h1>
+        </div>
+        <nav class="nav">
+          <a href="#services">Services</a>
+          <a href="#departments">Departments</a>
+          <a href="#news">News</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h2>Welcome to Experiment A</h2>
+      <p>The agent has been given a single document with FAQ, and answers questions from this knowledge</p>
+    </div>
+    
+    
+  </section>
+
+  <main class="main-content">
+    <div class="container">
+      <section class="services-grid" id="services">
+        <div class="service-card">
+          <h3>🏠 Media Services</h3>
+          <p>A list of media services for your viewing and consumption, both free and paid. Tailor your style of media for all scenarios.</p>
+        </div>
+        <div class="service-card">
+          <h3>🚗 News</h3>
+          <p>Access parking permits, public transit information, and road maintenance updates to keep Springfield moving.</p>
+        </div>
+        <div class="service-card">
+          <h3>💼 Business Services</h3>
+          <p>Start your business, renew licenses, and access resources for entrepreneurs and established businesses alike.</p>
+        </div>
+        <div class="service-card">
+          <h3>👥 Community</h3>
+          <p>Discover community events, volunteer opportunities, and programs that bring our neighborhoods together.</p>
+        </div>
+        <div class="service-card">
+          <h3>🏥 Health & Safety</h3>
+          <p>Access health services, emergency information, and safety resources to keep our community thriving.</p>
+        </div>
+        <div class="service-card">
+          <h3>📚 Education</h3>
+          <p>Connect with school districts, library services, and educational programs for learners of all ages.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <a href="#services">Services</a>
+          <a href="#departments">Departments</a>
+          <a href="#contact">Contact Us</a>
+          <a href="#emergency">Emergency Info</a>
+        </div>
+        <div class="footer-section">
+          <h4>Government</h4>
+          <a href="#mayor">Our Office</a>
+          <a href="#council">Partners/a>
+          <a href="#meetings">Recorded Meetings</a>
+          <a href="#budget">Budget</a>
+        </div>
+        <div class="footer-section">
+          <h4>Resources</h4>
+          <a href="#jobs">Employment</a>
+          <a href="#permits">Licenses</a>
+          <a href="#utilities">Utilities</a>
+          <a href="#recreation">Recreation</a>
+        </div>
+      </div>
+      <p>&copy; Contoso Media Organisation. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- use For explicit control, use data-webchat-style-* attributes (kebab-case versions of any WebChat styleOption):-->
+  <!-- full doc https://github.com/microsoft/botframework-webchat-embed -->
+<script>
+  window.chatStyles = {
+    bubbleBackground: '#ffffff',
+    bubbleFromUserBackground: '#0078d4',
+    bubbleFromUserTextColor: '#ffffff',
+    accent: '#0078d4'
+  };
+</script>
+<div
+  style="position: fixed; bottom: 20px; right: 20px; width: 450px; height: 800px;"
+  data-webchat-token-url="<directline url goes here>"
+  data-webchat-title="Contoso Chat"
+  data-webchat-bubble-text="Let's chat!"
+  data-webchat-style-options="chatStyles" >
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/botframework-webchat-embed@latest"></script>
+
+</body>
+</html>
